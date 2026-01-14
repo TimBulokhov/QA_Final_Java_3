@@ -1,5 +1,6 @@
 package utils;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -30,7 +31,14 @@ public class TestUtils {
     }
 
     public static String getBrowserType() {
-        String browserType = properties.getProperty("browser.type");
+        // Сначала проверяем системное свойство (из Maven профиля), затем application.properties
+        String browserType = System.getProperty("browser.type");
+        if (browserType == null || browserType.isEmpty()) {
+            browserType = properties.getProperty("browser.type");
+        }
+        if (browserType == null || browserType.isEmpty()) {
+            browserType = "chrome"; // значение по умолчанию
+        }
         logger.info("🔄 Определен браузер для тестов: " + browserType);
         return browserType.toLowerCase();
     }
@@ -57,23 +65,9 @@ public class TestUtils {
     private static WebDriver setupChromeBrowser() {
         logger.info("✅ Запуск тестов в Google Chrome");
 
-        // Получаем путь к chromedriver.exe из resources
-        URL chromeDriverUrl = TestUtils.class.getClassLoader().getResource("chromedriver.exe");
-        if (chromeDriverUrl == null) {
-            throw new RuntimeException("Файл chromedriver.exe не найден в resources");
-        }
-
-        try {
-            String chromeDriverPath = chromeDriverUrl.toURI().getPath();
-            // Убираем начальный слеш для Windows
-            if (chromeDriverPath.startsWith("/")) {
-                chromeDriverPath = chromeDriverPath.substring(1);
-            }
-            System.setProperty("webdriver.chrome.driver", chromeDriverPath);
-            logger.info("✅ ChromeDriver загружен из resources: " + chromeDriverPath);
-        } catch (java.net.URISyntaxException e) {
-            throw new RuntimeException("Ошибка при получении пути к ChromeDriver", e);
-        }
+        // Selenium 4.6+ автоматически управляет драйверами через встроенный Selenium Manager
+        // Не нужно явно устанавливать ChromeDriver - Selenium сделает это автоматически
+        logger.info("✅ Используется встроенный Selenium Manager для автоматического управления ChromeDriver");
 
         // Настройка опций Chrome
         ChromeOptions options = new ChromeOptions();
@@ -87,26 +81,30 @@ public class TestUtils {
     private static WebDriver setupYandexBrowser() {
         logger.info("✅ Запуск тестов в Яндекс.Браузере");
 
-        // Получаем путь к yandexdriver.exe из resources
-        URL yandexDriverUrl = TestUtils.class.getClassLoader().getResource("yandexdriver.exe");
-        if (yandexDriverUrl == null) {
-            throw new RuntimeException("Файл yandexdriver.exe не найден в resources");
-        }
-
-        try {
-            String yandexDriverPath = yandexDriverUrl.toURI().getPath();
-            // Убираем начальный слеш для Windows
-            if (yandexDriverPath.startsWith("/")) {
-                yandexDriverPath = yandexDriverPath.substring(1);
-            }
-            System.setProperty("webdriver.chrome.driver", yandexDriverPath);
-            logger.info("✅ YandexDriver загружен из resources: " + yandexDriverPath);
-        } catch (java.net.URISyntaxException e) {
-            throw new RuntimeException("Ошибка при получении пути к YandexDriver", e);
-        }
+        // Используем WebDriverManager для загрузки ChromeDriver версии 142 (совместимой с Yandex 142)
+        // Указываем browserVersion чтобы WebDriverManager загрузил правильную версию
+        WebDriverManager.chromedriver().browserVersion("142").setup();
+        logger.info("✅ ChromeDriver для Yandex настроен через WebDriverManager (версия 142)");
 
         // Специальные опции для Яндекс.Браузера
         ChromeOptions options = new ChromeOptions();
+        
+        // Указываем путь к Yandex браузеру
+        String yandexBrowserPath = "C:\\Program Files (x86)\\Yandex\\YandexBrowser\\Application\\browser.exe";
+        if (new java.io.File(yandexBrowserPath).exists()) {
+            options.setBinary(yandexBrowserPath);
+            logger.info("✅ Путь к Yandex браузеру: " + yandexBrowserPath);
+        } else {
+            // Альтернативный путь
+            yandexBrowserPath = "C:\\Program Files\\Yandex\\YandexBrowser\\Application\\browser.exe";
+            if (new java.io.File(yandexBrowserPath).exists()) {
+                options.setBinary(yandexBrowserPath);
+                logger.info("✅ Путь к Yandex браузеру: " + yandexBrowserPath);
+            } else {
+                logger.warning("⚠️ Yandex браузер не найден по стандартным путям, используется системный Chrome");
+            }
+        }
+        
         options.addArguments("--remote-allow-origins=*");
         options.addArguments("--no-sandbox");
         options.addArguments("--start-maximized");

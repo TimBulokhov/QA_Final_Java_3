@@ -1,0 +1,7 @@
+utils\DataGenerator.class
+RegistrationTest.class
+LoginFromDifferentPlacesTest.class
+ConstructorTest.class
+utils\TestUtils.class
+utils\UserManager.class
+BaseTest.class

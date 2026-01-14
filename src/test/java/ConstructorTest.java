@@ -2,7 +2,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
@@ -31,7 +30,6 @@ public class ConstructorTest extends BaseTest {
         assertTrue("Раздел соусов должен быть активен", mainPage.isSaucesSectionActive());
         assertTrue("Заголовок раздела соусов должен отображаться", mainPage.isSaucesSectionTitleDisplayed());
         assertTrue("Должны присутствовать элементы соусов", mainPage.getSaucesCount() > 0);
-
     }
 
     @Test

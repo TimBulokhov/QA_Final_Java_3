@@ -14,14 +14,10 @@ import java.util.List;
 public class MainPage {
     private final WebDriver driver;
     private final By activeTab = By.xpath("//div[contains(@class, 'tab_tab_type_current__2BEPc')]");
-    private final By tabLocator = By.xpath("//div[contains(@class, 'tab_tab__1SPyG')]");
     private final By ingredientsList = By.className("BurgerIngredients_ingredients__list__2A-mT");
     private final By ingredientItem = By.className("BurgerIngredient_ingredient__1TVf6");
     private final By header = (By.xpath("//h2[@class='text text_type_main-medium mb-6 mt-10']"));
     private final By tabContainer = (By.xpath("//div[contains(@style, 'display: flex')]"));
-    private final By bunsSection = By.xpath("//h2[text()='Булки']");
-    private final By saucesSection = By.xpath("//h2[text()='Соусы']");
-    private final By fillingsSection = By.xpath("//h2[text()='Начинки']");
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
@@ -58,11 +54,6 @@ public class MainPage {
     public boolean isFillingsSectionActive() {
         return isSectionActive("Начинки");
     }
-    @Step("Получить заголовок активного раздела")
-    public String getActiveSectionTitle() {
-        WebElement active = driver.findElement(activeTab);
-        return active.getText();
-    }
 
     @Step("Получить количество булок")
     public int getBunsCount() {
@@ -95,7 +86,22 @@ public class MainPage {
     @Step("Проверить активность раздела")
     private boolean isSectionActive(String sectionName) {
         try {
+            scrollToTabs();
+            waitShort();
+            
             WebElement active = driver.findElement(activeTab);
+            String currentActiveTab = active.getText();
+            if (!currentActiveTab.equals(sectionName)) {
+                By tabXpath = By.xpath("//div[contains(@class, 'tab_tab__1SPyG')]//span[text()='" + sectionName + "']/..");
+                WebElement tab = new WebDriverWait(driver, Duration.ofSeconds(5))
+                        .until(ExpectedConditions.elementToBeClickable(tabXpath));
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", tab);
+                waitShort();
+                new WebDriverWait(driver, Duration.ofSeconds(5))
+                        .until(ExpectedConditions.textToBePresentInElementLocated(activeTab, sectionName));
+            }
+            
+            active = driver.findElement(activeTab);
             return active.getText().equals(sectionName);
         } catch (Exception e) {
             return false;
