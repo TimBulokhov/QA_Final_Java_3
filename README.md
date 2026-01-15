@@ -1,4 +1,4 @@
-# 🍔 QA Java Diplom 3 - Автоматизация тестирования Stellar Burgers
+# 🍔 QA Final Java 3 - Автоматизация тестирования Stellar Burgers
 
 
 
