@@ -1,8 +1,0 @@
-model\UserClientSteps.class
-page\ProfilePage.class
-constants\TestData.class
-page\RegisterPage.class
-model\User.class
-page\MainPage.class
-page\LoginPage.class
-page\RecoverPasswordPage.class
