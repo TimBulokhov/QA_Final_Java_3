@@ -1,0 +1,17 @@
+# Maven
+target/
+!target/allure-results/
+
+# IDE
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Compiled classes
+*.class
+
+# Logs
+*.log

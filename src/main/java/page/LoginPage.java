@@ -54,8 +54,12 @@ public class LoginPage {
     public void waitForMainPageLoad() {
         new WebDriverWait(driver, Duration.ofSeconds(30))
                 .until(ExpectedConditions.urlToBe(baseUrl + "/"));
+        // Ждем либо кнопку "Оформить заказ" (если залогинен), либо кнопку "Войти в аккаунт" (если не залогинен)
         new WebDriverWait(driver, Duration.ofSeconds(30))
-                .until(ExpectedConditions.visibilityOfElementLocated(makeOrderButton));
+                .until(ExpectedConditions.or(
+                        ExpectedConditions.visibilityOfElementLocated(makeOrderButton),
+                        ExpectedConditions.visibilityOfElementLocated(enterAccountButton)
+                ));
     }
 
     @Step("Клик по кнопке 'Войти в аккаунт'")
@@ -292,6 +296,20 @@ public class LoginPage {
     public void goToLoginPage() {
         driver.get(baseUrl + "/login");
         waitForLoadEntrance();
+    }
+
+    @Step("Переход на страницу регистрации")
+    public void goToRegisterPage() {
+        driver.get(baseUrl + "/register");
+        new WebDriverWait(driver, Duration.ofSeconds(30))
+                .until(ExpectedConditions.urlContains("/register"));
+    }
+
+    @Step("Переход на страницу восстановления пароля")
+    public void goToForgotPasswordPage() {
+        driver.get(baseUrl + "/forgot-password");
+        new WebDriverWait(driver, Duration.ofSeconds(30))
+                .until(ExpectedConditions.visibilityOfElementLocated(forgotPasswordText));
     }
 
     // Вспомогательный метод для проверки наличия элемента

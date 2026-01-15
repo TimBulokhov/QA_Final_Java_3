@@ -91,18 +91,7 @@ public class MainPage {
             
             WebElement active = driver.findElement(activeTab);
             String currentActiveTab = active.getText();
-            if (!currentActiveTab.equals(sectionName)) {
-                By tabXpath = By.xpath("//div[contains(@class, 'tab_tab__1SPyG')]//span[text()='" + sectionName + "']/..");
-                WebElement tab = new WebDriverWait(driver, Duration.ofSeconds(5))
-                        .until(ExpectedConditions.elementToBeClickable(tabXpath));
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", tab);
-                waitShort();
-                new WebDriverWait(driver, Duration.ofSeconds(5))
-                        .until(ExpectedConditions.textToBePresentInElementLocated(activeTab, sectionName));
-            }
-            
-            active = driver.findElement(activeTab);
-            return active.getText().equals(sectionName);
+            return currentActiveTab.equals(sectionName);
         } catch (Exception e) {
             return false;
         }
@@ -179,6 +168,14 @@ public class MainPage {
 
         // Проверяем наличие элементов булок
         checkIngredientsPresence("Булки", 2);
+        
+        // После скролла возвращаемся к табам и восстанавливаем активный таб
+        scrollToTabs();
+        waitShort();
+        // Убеждаемся, что таб "Булки" все еще активен после скролла
+        if (!isSectionActive("Булки")) {
+            clickOnBunsButton();
+        }
         waitShort();
     }
 
@@ -192,6 +189,14 @@ public class MainPage {
 
         // Проверяем наличие элементов соусов
         checkIngredientsPresence("Соусы", 2);
+        
+        // После скролла возвращаемся к табам и восстанавливаем активный таб
+        scrollToTabs();
+        waitShort();
+        // Убеждаемся, что таб "Соусы" все еще активен после скролла
+        if (!isSectionActive("Соусы")) {
+            clickOnSaucesButton();
+        }
         waitShort();
     }
 
@@ -205,6 +210,14 @@ public class MainPage {
 
         // Проверяем наличие элементов начинок
         checkIngredientsPresence("Начинки", 2);
+        
+        // После скролла возвращаемся к табам и восстанавливаем активный таб
+        scrollToTabs();
+        waitShort();
+        // Убеждаемся, что таб "Начинки" все еще активен после скролла
+        if (!isSectionActive("Начинки")) {
+            clickOnFillingButton();
+        }
         waitShort();
     }
 

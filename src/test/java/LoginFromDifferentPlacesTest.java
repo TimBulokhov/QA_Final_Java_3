@@ -40,11 +40,11 @@ public class LoginFromDifferentPlacesTest {
         driver = TestUtils.createDriver();
         loginPage = new LoginPage(driver);
 
-        // Переход на главную страницу
-        driver.get(TestUtils.getBaseUrl() + "/");
+        // Переход на главную страницу через Page Object
+        loginPage.goToMainPage();
 
-        // Нажимаем кнопку "Войти в аккаунт"
-        driver.findElement(loginPage.getEnterAccountButton()).click();
+        // Нажимаем кнопку "Войти в аккаунт" через Page Object
+        loginPage.clickOnEnterAccountButton();
 
         // Логин через Page Object
         loginPage.login(testUser.getEmail(), testUser.getPassword());
@@ -63,11 +63,11 @@ public class LoginFromDifferentPlacesTest {
         driver = TestUtils.createDriver();
         loginPage = new LoginPage(driver);
 
-        // Переход на главную страницу
-        driver.get(TestUtils.getBaseUrl() + "/");
+        // Переход на главную страницу через Page Object
+        loginPage.goToMainPage();
 
-        // Нажимаем кнопку "Личный Кабинет"
-        driver.findElement(loginPage.getPersonalAccountLink()).click();
+        // Нажимаем кнопку "Личный Кабинет" через Page Object
+        loginPage.clickOnPersonalAccountLink();
 
         // Логин через Page Object
         loginPage.login(testUser.getEmail(), testUser.getPassword());
@@ -86,10 +86,10 @@ public class LoginFromDifferentPlacesTest {
         driver = TestUtils.createDriver();
         loginPage = new LoginPage(driver);
 
-        // Переход на страницу регистрации
-        driver.get(TestUtils.getBaseUrl() + "/register");
+        // Переход на страницу регистрации через Page Object
+        loginPage.goToRegisterPage();
 
-        // Нажимаем на ссылку "Войти"
+        // Нажимаем на ссылку "Войти" через Page Object
         loginPage.clickOnRegisterLink();
 
         // Логин через Page Object
@@ -109,10 +109,10 @@ public class LoginFromDifferentPlacesTest {
         driver = TestUtils.createDriver();
         loginPage = new LoginPage(driver);
 
-        // Переход на страницу восстановления пароля
-        driver.get(TestUtils.getBaseUrl() + "/forgot-password");
+        // Переход на страницу восстановления пароля через Page Object
+        loginPage.goToForgotPasswordPage();
 
-        // Нажимаем на ссылку "Войти"
+        // Нажимаем на ссылку "Войти" через Page Object
         loginPage.clickOnForgotPasswordLink();
 
         // Логин через Page Object

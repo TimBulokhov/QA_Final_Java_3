@@ -13,6 +13,11 @@ public class ConstructorTest extends BaseTest {
     public void bunsSectionTest() {
         // Ждем загрузки страницы
         mainPage.waitForPageLoad();
+        // Сбрасываем состояние - переходим на Булки (дефолтное состояние)
+        mainPage.clickOnBunsButton();
+        // Сначала кликаем на другой раздел (Соусы), чтобы убедиться, что мы не на разделе Булки
+        mainPage.clickOnSaucesButton();
+        // Затем кликаем на раздел Булки
         mainPage.clickOnBunsButton();
         mainPage.checkToppingBun();
         assertTrue("Раздел булок должен быть активен", mainPage.isBunsSectionActive());
@@ -25,6 +30,9 @@ public class ConstructorTest extends BaseTest {
     @Description("Проверка перехода к разделу соусов в конструкторе")
     public void saucesSectionTest() {
         mainPage.waitForPageLoad();
+        // Сбрасываем состояние - переходим на Булки (дефолтное состояние)
+        mainPage.clickOnBunsButton();
+        // Теперь переходим на Соусы
         mainPage.clickOnSaucesButton();
         mainPage.checkToppingSauce();
         assertTrue("Раздел соусов должен быть активен", mainPage.isSaucesSectionActive());
@@ -37,6 +45,9 @@ public class ConstructorTest extends BaseTest {
     @Description("Проверка перехода к разделу начинок в конструкторе")
     public void fillingsSectionTest() {
         mainPage.waitForPageLoad();
+        // Сбрасываем состояние - переходим на Булки (дефолтное состояние)
+        mainPage.clickOnBunsButton();
+        // Теперь переходим на Начинки
         mainPage.clickOnFillingButton();
         mainPage.checkToppingFillings();
         assertTrue("Раздел начинок должен быть активен", mainPage.isFillingsSectionActive());
